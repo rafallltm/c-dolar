@@ -1,7 +1,6 @@
 #include <stdio.h>
 
-int main()
-{
+int main(){
     float valor_real, cotacao_dolar, convert;
 
         printf("Programa para converter reais em dolares: \n ");
