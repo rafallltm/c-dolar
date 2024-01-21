@@ -1,6 +1,6 @@
 # My conversor simples de R$real para $dolar em C
 
-No linux:
+
 
 $gdb -v
 
