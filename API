@@ -1,0 +1,5 @@
+curl -X GET "https://v6.exchangerate-api.com/v6/fb3853d161ff08b6c851ee78/latest/USD"
+https://v6.exchangerate-api.com/v6/fb3853d161ff08b6c851ee78/latest/USD
+
+Obtenha sua Chave de API da exchangerate
+Vá para [exchangerate-api.com](https://www.exchangerate-api.com/) e registre-se para obter uma chave de API gratuita.
