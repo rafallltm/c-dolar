@@ -22,8 +22,14 @@
 
 `gcc -Wall dolar.c -lcurl -o dolar`
 
-
 `./dolar`
+#### Dockerfile
+`docker build -t c-dolar:1.0 .`
+
+`docker run -it c-dolar:1.0`
+
+#
+
 
 <p align="center">
   <img src="./print.png" alt="Logo do Projeto">
