@@ -26,6 +26,6 @@
   
    - Defina a chave como uma variável de ambiente chamada `EXCHANGE_TAXA_API_KEY`
 
-   - Se a variável de ambiente não estiver configurada, o programa solicitará que insira a chave da sua API ao ser executado.
+  
 
   

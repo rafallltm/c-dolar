@@ -1,6 +1,9 @@
+from flask import Flask, render_template, request, jsonify
 import os
 import requests
 from datetime import datetime, timedelta
+
+app = Flask(__name__)
 
 # Cache para armazenar a taxa de câmbio e o horário da última atualização
 cache_taxa_cambio = {"taxa": None, "ultima_atualizacao": None}
@@ -36,37 +39,40 @@ def obter_taxa_cambio(chave_api):
         print(f"Erro na requisição HTTP: {e}")
         return -1.0
 
-# Função principal
-def main():
-    # Obtém a chave da API da variável de ambiente ou solicita ao usuário
+@app.route("/")
+def index():
+    return render_template("index.html")
+
+@app.route("/get_rate", methods=["GET"])
+def get_rate():
     chave_api = os.getenv("EXCHANGE_TAXA_API_KEY")
     if not chave_api:
-        chave_api = input("Digite a chave da API: ")
+        return jsonify({"error": "Chave da API não encontrada"}), 400
 
-    # Obtém a taxa de câmbio
     taxa = obter_taxa_cambio(chave_api)
     if taxa < 0:
-        print("Erro ao obter a taxa de câmbio.")
-        return
+        return jsonify({"error": "Erro ao obter a taxa de câmbio"}), 500
 
-    print(f"Taxa de câmbio USD-BRL: {taxa}")
+    return jsonify({"taxa": taxa})
 
-    # Loop para permitir várias conversões
-    while True:
-        try:
-            reais = float(input("Digite o valor em Reais (BRL) ou '0' para sair: "))
-            if reais == 0:
-                print("Saindo...")
-                break
-            if reais < 0:
-                print("Erro: O valor não pode ser negativo.")
-                continue
+@app.route("/convert", methods=["POST"])
+def convert():
+    data = request.json
+    reais = data.get("reais")
+    taxa = data.get("taxa")
 
-            dolares = reais / taxa
-            print(f"Valor em Dólares (USD): {dolares:.2f}")
-        except ValueError:
-            print("Erro: Valor inválido. Por favor, insira um número.")
+    if not reais or not taxa:
+        return jsonify({"error": "Dados inválidos"}), 400
 
+    try:
+        reais = float(reais)
+        if reais < 0:
+            return jsonify({"error": "O valor não pode ser negativo"}), 400
+
+        dolares = reais / float(taxa)
+        return jsonify({"dolares": round(dolares, 2)})
+    except ValueError:
+        return jsonify({"error": "Valor inválido"}), 400
 
 if __name__ == "__main__":
-    main()
+    app.run(debug=True)
